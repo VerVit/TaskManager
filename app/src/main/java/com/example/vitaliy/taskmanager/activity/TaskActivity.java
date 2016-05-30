@@ -3,7 +3,6 @@ package com.example.vitaliy.taskmanager.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,14 +17,13 @@ import java.util.ArrayList;
 
 public class TaskActivity extends Activity {
 
-    private ArrayList<String> mArrayListTaskName;
-    private ArrayList<String> mArrayListDescription;
     private ArrayList<Task> mArrayListTasks;
     private CustomAdapter mAdapter;
 
     final int REQUEST_CODE = 123;
     public final static String TASK_KEY = "Task";
     public final static String DESCRIPTION_KEY = "Description";
+    public final static String AL_OF_TASK_KEY = "ArrayList with Tasks";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,21 +32,11 @@ public class TaskActivity extends Activity {
 
         final ListView mViewTaskList = (ListView) findViewById(R.id.listView_task);
 
-        //Створюємо ArrayList для об’єктів Task
-        mArrayListTasks = new ArrayList<>();
-
-        //Відновлюємо втрачені дані після знищення актівітіс(зміни орієнтації екрану)
+        //Відновлюємо втрачені дані після знищення актівіті(зміни орієнтації екрану)
         if (savedInstanceState != null) {
-            //отримуємо ArrayList із масиву TaskName
-            mArrayListTaskName = savedInstanceState.getStringArrayList(TASK_KEY);
-            //Log.d("MLog", "Ліст з тасків " + mArrayListTaskName);
-            //отримуємо ArrayList із масиву Description
-            mArrayListDescription = savedInstanceState.getStringArrayList(DESCRIPTION_KEY);
-            //Log.d("MLog", "Ліст з описів " + mArrayListDescription);
-            //добавляємо за допомогою методу setTaskNameAndDescription TaskName і Description
-            // в ArrayList, що містить об’єкти Task
-            mArrayListTasks.addAll(setTaskNameAndDescription(mArrayListTaskName, mArrayListDescription));
-            // Log.d("MLog", "Обєкти таск в лісті " + mArrayListTasks);
+            mArrayListTasks=savedInstanceState.getParcelableArrayList(AL_OF_TASK_KEY);
+        }else {
+            mArrayListTasks = new ArrayList<>();
         }
 
         //Створюємо адаптер для ListView та прикріплюємо його. Встановлюємо автоматичне оновлення
@@ -90,47 +78,15 @@ public class TaskActivity extends Activity {
             String task = data.getStringExtra(TASK_KEY);
             String description = data.getStringExtra(DESCRIPTION_KEY);
             mArrayListTasks.add(new Task(task, description));
-            //Log.d("MLog", "Task " + mArrayListTaskName + "   Description " + mArrayListDescription);
             mAdapter.notifyDataSetChanged();
         }
     }
 
-    // метод отримання ArrayList<String> з TaskName із ArrayList<Task>
-    private ArrayList<String> getTaskNameFromArrayList(ArrayList<Task> arrayListTaskList) {
-        ArrayList<String> taskNameList = new ArrayList<>();
-        for (Task task : arrayListTaskList) {
-            taskNameList.add(task.getmTaskName());
-        }
-        return taskNameList;
-    }
-
-    // метод отримання ArrayList<String> з Description із ArrayList<Task>
-    private ArrayList<String> getDescriptionFromArrayList(ArrayList<Task> arrayListTaskList) {
-        ArrayList<String> descriptionList = new ArrayList<>();
-        for (Task task : arrayListTaskList) {
-            descriptionList.add(task.getmDescription());
-        }
-        return descriptionList;
-    }
-
-    // поміщаємо дані з двох ArrayList із TaskName та Description в ArrayList <Task>
-    private ArrayList<Task> setTaskNameAndDescription(ArrayList<String> mArrayListTaskName,
-                                                      ArrayList<String> mArrayListDescription) {
-        ArrayList<Task> arrayListTask = new ArrayList<>();
-        for (int index = 0; index < mArrayListTaskName.size(); index++) {
-            arrayListTask.add(new Task(mArrayListTaskName.get(index), mArrayListDescription.get(index)));
-            Log.d("MLog", "В лысты пысля повороту, в циклы " + arrayListTask);
-        }
-        return arrayListTask;
-    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mArrayListTaskName = getTaskNameFromArrayList(mArrayListTasks);
-        mArrayListDescription = getDescriptionFromArrayList(mArrayListTasks);
-
-        outState.putStringArrayList(TASK_KEY, mArrayListTaskName);
-        outState.putStringArrayList(DESCRIPTION_KEY, mArrayListDescription);
+        //поміщаємо дані для збереження після знищення актівіті
+        outState.putParcelableArrayList(AL_OF_TASK_KEY,mArrayListTasks);
     }
 }
