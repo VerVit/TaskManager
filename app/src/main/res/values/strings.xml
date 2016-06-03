@@ -3,6 +3,13 @@
     <string name="button_add">Add</string>
     <string name="editText_description">Task description</string>
     <string name="editText_task">Task</string>
-    <string name="button_save">Save</string>
-    <string name="button_exit">Exit</string>
+    <string name="button_save">  Save  </string>
+    <string name="button_exit"> Exit </string>
+    <string name="item_load">Load</string>
+    <string name="item_random">Random</string>
+
+    <string-array name="context_menu">
+        <item>Edit</item>
+        <item>Delete</item>
+    </string-array>
 </resources>

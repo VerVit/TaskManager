@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_layout"
+    android:id="@+id/main_layout_2activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBlack"
@@ -18,7 +18,9 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:hint="@string/editText_task"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:textSize="@dimen/text_task"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/editText_taskDescription"
@@ -30,28 +32,30 @@
         android:hint="@string/editText_description"
         android:inputType="textMultiLine"
         android:lines="3"
-        android:maxLines="3" />
+        android:maxLines="3"
+        android:textSize="@dimen/text_description"
+        android:textStyle="italic" />
 
     <Button
         android:id="@+id/button_save"
+        style="@style/ButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/editText_taskDescription"
-        android:background="@drawable/background"
-        android:text="@string/button_save"
-        android:textSize="20sp" />
+        android:background="@drawable/button_selector_save"
+        android:text="@string/button_save" />
 
     <Button
         android:id="@+id/button_exit"
+        style="@style/ButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/button_save"
-        android:background="@drawable/background"
-        android:text="@string/button_exit"
-        android:textSize="20sp" />
+        android:background="@drawable/button_selector_exit"
+        android:text="@string/button_exit" />
 
 </RelativeLayout>

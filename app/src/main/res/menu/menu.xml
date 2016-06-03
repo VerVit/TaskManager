@@ -5,7 +5,19 @@
     tools:context=".MainActivity">
     <item
         android:id="@+id/item_exit"
-        android:orderInCategory="100"
+        android:orderInCategory="3"
         android:title="@string/button_exit"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/item_load_data"
+        android:icon="@drawable/ic_file_download_white_36dp"
+        android:orderInCategory="1"
+        android:title="@string/item_load"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/item_random"
+        android:icon="@drawable/ic_insert_emoticon_white_36dp"
+        android:orderInCategory="2"
+        android:title="@string/item_random"
+        app:showAsAction="ifRoom" />
 </menu>

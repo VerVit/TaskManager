@@ -3,6 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorButton">#2b9722</color>
+    <color name="colorGreen">#098000</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorDRKBlue">#100194</color>
+    <color name="colorLGHTYellow">#5d860d</color>
+    <color name="colorRed">#c49e0604</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
 </resources>

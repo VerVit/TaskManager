@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.vitaliy.taskmanager.R;
@@ -38,6 +39,9 @@ public class CustomAdapter extends ArrayAdapter<Task> {
             viewHolder = new ViewHolder();
             viewHolder.mTextViewTaskName = (TextView) row.findViewById(R.id.textView_item_task);
             viewHolder.mTextViewDescription = (TextView) row.findViewById(R.id.textView_item_description);
+            viewHolder.mTextViewTaskBegin = (TextView) row.findViewById(R.id.textView_dateTime_start);
+            viewHolder.mTextViewTaskFinish = (TextView) row.findViewById(R.id.textView_dateTime_finish);
+            viewHolder.mItemLayout = (LinearLayout) row.findViewById(R.id.root_item_layout);
 
             row.setTag(viewHolder);
         } else {
@@ -47,13 +51,20 @@ public class CustomAdapter extends ArrayAdapter<Task> {
         Task task = mArrayTaskList.get(position);
         viewHolder.mTextViewTaskName.setText(task.getmTaskName());
         viewHolder.mTextViewDescription.setText(task.getmDescription());
+        viewHolder.mTextViewTaskBegin.setText(task.getmTaskBegin());
+        viewHolder.mTextViewTaskFinish.setText(task.getmTaskFinish());
+        viewHolder.mItemLayout.setBackgroundColor(task.getmTaskColor());
 
         return row;
 
     }
+
     // Wrapper для TextView
     static class ViewHolder {
         TextView mTextViewTaskName;
         TextView mTextViewDescription;
+        TextView mTextViewTaskBegin;
+        TextView mTextViewTaskFinish;
+        LinearLayout mItemLayout;
     }
 }
