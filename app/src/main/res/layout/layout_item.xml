@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/textColorBlack"
         android:textSize="@dimen/text_task"
         android:textStyle="bold"
         tools:text="Large Text" />
@@ -22,6 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/textColorSecondary"
         android:textSize="@dimen/text_description"
         android:textStyle="italic"
         android:typeface="monospace"
@@ -40,6 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/textColorSecondary"
             android:textSize="@dimen/text_time"
             android:typeface="normal"
             tools:text="Small Text" />
@@ -50,6 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/textColorSecondary"
             android:textSize="@dimen/text_time"
             android:typeface="normal"
             tools:text="Small Text" />

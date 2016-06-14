@@ -22,11 +22,11 @@ public class CustomAdapter extends ArrayAdapter<Task> {
     private final ArrayList<Task> mArrayTaskList;
     private final int mLayoutResource;
 
-    public CustomAdapter(Context mContext, ArrayList<Task> mArrayTaskList, int mLayoutResourse) {
-        super(mContext, mLayoutResourse, mArrayTaskList);
+    public CustomAdapter(Context mContext, ArrayList<Task> mArrayTaskList, int mLayoutRecourse) {
+        super(mContext, mLayoutRecourse, mArrayTaskList);
         this.mContext = mContext;
         this.mArrayTaskList = mArrayTaskList;
-        this.mLayoutResource = mLayoutResourse;
+        this.mLayoutResource = mLayoutRecourse;
     }
 
     @Override

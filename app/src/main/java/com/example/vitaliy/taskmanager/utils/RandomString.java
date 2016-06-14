@@ -10,24 +10,14 @@ public class RandomString {
     private final static String CHARACTERS = "0123456789qwertyuiopasdfghjklzxcvbnm";
 
     //Створює рандомну назву завдання
-    public static String randomName() {
+    public static String getRandom(int length) {
         Random random = new Random();
         StringBuilder randomStringBuilder = new StringBuilder();
-        int randomLength = random.nextInt(10);
+        int randomLength = random.nextInt(length)+1;
         for (int i = 0; i < randomLength; i++) {
             randomStringBuilder.append(CHARACTERS.charAt((random.nextInt(CHARACTERS.length()))));
         }
         return randomStringBuilder.toString();
     }
 
-    //Створює рандомний опис завдання
-    public static String randomDescription() {
-        Random random = new Random();
-        StringBuilder randomStringBuilder = new StringBuilder();
-        int randomLength = random.nextInt(30);
-        for (int i = 0; i < randomLength; i++) {
-            randomStringBuilder.append(CHARACTERS.charAt((random.nextInt(CHARACTERS.length()))));
-        }
-        return randomStringBuilder.toString();
-    }
 }

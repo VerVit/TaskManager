@@ -1,0 +1,63 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.vitaliy.taskmanager.activity.TaskActivity">
+    <item
+        android:id="@+id/item_settings"
+        android:icon="@drawable/ic_confige"
+        android:orderInCategory="3"
+        android:title="@string/settings"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/item_add"
+        android:icon="@drawable/ic_add_white_36dp"
+        android:orderInCategory="1"
+        android:title="@string/Add"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/item_sort"
+        android:icon="@drawable/ic_sort_white_36dp"
+        android:orderInCategory="2"
+        android:title="@string/item_sort"
+        app:showAsAction="ifRoom">
+        <menu>
+            <group
+                android:id="@+id/item_group_sort"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/menuSortA_Z"
+                    android:title="@string/sub_menu_sort_name_a_z"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/menuSortZ_A"
+                    android:title="@string/sub_menu_sort_name_z_a"
+                    app:showAsAction="never" />
+
+                <item
+                    android:id="@+id/menuSort0_9"
+                    android:title="@string/sub_menu_sort_time_begin_finish"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/menuSort9_0"
+                    android:title="@string/sub_menu_sort_time_finish_begin"
+                    app:showAsAction="never" />
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/item_exit"
+        android:orderInCategory="300"
+        android:title="@string/button_exit"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/item_clean_list"
+        android:orderInCategory="100"
+        android:title="@string/item_cleanAll"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/item_random"
+        android:orderInCategory="200"
+        android:title="@string/item_random"
+        app:showAsAction="never" />
+
+</menu>

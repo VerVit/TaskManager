@@ -7,9 +7,37 @@
     <string name="button_exit"> Exit </string>
     <string name="item_load">Load</string>
     <string name="item_random">Random</string>
+    <string name="item_add">Add</string>
+    <string name="item_cleanAll">Clean all</string>
+    <string name="item_sort">Sort</string>
+    <string name="sub_menu_sort_name_a_z">by name A-Z</string>
+    <string name="sub_menu_sort_name_z_a">by name Z-A</string>
+    <string name="sub_menu_sort_time_begin_finish">by time 0–9 </string>
+    <string name="sub_menu_sort_time_finish_begin">by time 9–0</string>
+
+    <string name="dialog_title">DELETE TASKS</string>
+    <string name="dialog_message">Do you want to delete all tasks?</string>
+    <string name="dialog_positive_button">YES</string>
+    <string name="dialog_negative_button">NO</string>
 
     <string-array name="context_menu">
         <item>Edit</item>
         <item>Delete</item>
     </string-array>
+    <string name="OK">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="Add">Add</string>
+    <string name="toolbar_title_add_task">Add Task</string>
+    <string name="settings">Setting</string>
+    <string name="title_activity_task_setting">Task Setting</string>
+    <string name="textView_taskCreate">Task create</string>
+    <string name="textView_description_taskCreate">Change the color\nof the task if it created</string>
+    <string name="textView_taskBegin">Task begin</string>
+    <string name="textView_description_taskBegin">Change the color\nof the task if it begin</string>
+    <string name="textView_taskFinish">Task finish</string>
+    <string name="textView_description_taskFinish">Change the color\nof the task if it finished</string>
+    <string name="IB_task_create_description">Color if task create</string>
+    <string name="IB_task_begin_description">Color if than task begin</string>
+    <string name="IB_task_finish_description">Color if task finish</string>
+    <string name="item_default">Default</string>
 </resources>

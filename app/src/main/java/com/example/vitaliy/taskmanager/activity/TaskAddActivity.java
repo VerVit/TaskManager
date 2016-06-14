@@ -1,22 +1,24 @@
 package com.example.vitaliy.taskmanager.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.view.View;
-import android.widget.Button;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import com.example.vitaliy.taskmanager.R;
 
-public class TaskAddActivity extends Activity implements View.OnClickListener {
+public class TaskAddActivity extends AppCompatActivity {
 
     private EditText mEditTextTaskName;
     private EditText mEditTextDescription;
     private int mItemPosition;
-    private RelativeLayout mMainLayout;
+    private LinearLayout mMainLayout;
+    private Snackbar mSnackBarExit;
 
     private final static String NAME_TASK_KEY = "Task name";
     private final static String DESCRIPTION_TASK_KEY = "Description";
@@ -26,10 +28,12 @@ public class TaskAddActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_add);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         mEditTextTaskName = (EditText) findViewById(R.id.editText_taskName);
         mEditTextDescription = (EditText) findViewById(R.id.editText_taskDescription);
-        mMainLayout = (RelativeLayout) findViewById(R.id.main_layout_2activity);
+        mMainLayout = (LinearLayout) findViewById(R.id.main_layout_2activity);
 
         //Відновлюємо втрачені дані після знищення актівіті(зміни орієнтації екрану)
         if (savedInstanceState != null) {
@@ -37,11 +41,12 @@ public class TaskAddActivity extends Activity implements View.OnClickListener {
             mEditTextDescription.setText(savedInstanceState.getString(DESCRIPTION_TASK_KEY));
         }
 
-        Button btn_save = (Button) findViewById(R.id.button_save);
-        Button btn_exit = (Button) findViewById(R.id.button_exit);
-        btn_save.setOnClickListener(this);
-        btn_exit.setOnClickListener(this);
         //заповнюємо EditText для редагування завдань
+        fillEditText();
+
+    }
+
+    private void fillEditText() {
         Intent intent = getIntent();
         if (intent != null) {
             mEditTextTaskName.setText(intent.getStringExtra(TaskActivity.TASK_KEY));
@@ -49,7 +54,6 @@ public class TaskAddActivity extends Activity implements View.OnClickListener {
             //Передаєм номер позиції Item в ListView
             mItemPosition = intent.getIntExtra(TaskActivity.ITEM_LIST_VIEW_POSITION_KEY, 456);
         }
-
     }
 
     private String getTextFromEditText(EditText editTextName) {
@@ -57,9 +61,16 @@ public class TaskAddActivity extends Activity implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.button_save:
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_task_add, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.item_ok:
                 //Виконується коли не заповнене одне із EditText
                 if (mEditTextTaskName.getText().toString().equals("") ||
                         mEditTextDescription.getText().toString().equals("")) {
@@ -79,11 +90,13 @@ public class TaskAddActivity extends Activity implements View.OnClickListener {
                     overridePendingTransition(R.anim.enter_left_to_right, R.anim.exit_left_to_right);
                 }
                 break;
-            case R.id.button_exit:
+            case R.id.item_cancel:
                 finish();
                 overridePendingTransition(R.anim.enter_left_to_right, R.anim.exit_left_to_right);
                 break;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

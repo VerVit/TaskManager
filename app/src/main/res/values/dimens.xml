@@ -5,4 +5,6 @@
     <dimen name="text_task">22sp</dimen>
     <dimen name="text_description">16sp</dimen>
     <dimen name="text_time">12sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="setting_margin_mainLayout">10dp</dimen>
 </resources>
