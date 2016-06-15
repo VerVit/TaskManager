@@ -138,22 +138,7 @@ public class TaskSetting extends AppCompatActivity implements View.OnClickListen
 
             // Призначаємо слухача на кнопку "назад"
             case android.R.id.home:
-                if (mOldColorButtonTaskCreate == mColorButtonTaskCreate &&
-                        mOldColorButtonTaskBegin == mColorButtonTaskBegin &&
-                        mOldColorButtonTaskFinish == mColorButtonTaskFinish) {
-                    finish();
-                    // Анімація переходу між актівіті
-                    overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_right_to_left);
-                } else {
-                    Intent intent = new Intent(this, TaskActivity.class);
-                    intent.putExtra(TaskActivity.COLOR_TASK_CREATE, mColorButtonTaskCreate);
-                    intent.putExtra(TaskActivity.COLOR_TASK_BEGIN, mColorButtonTaskBegin);
-                    intent.putExtra(TaskActivity.COLOR_TASK_FINISH, mColorButtonTaskFinish);
-                    setResult(TaskActivity.RESULT_OK, intent);
-                    finish();
-                    // Анімація переходу між актівіті
-                    overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_right_to_left);
-                }
+                changeColor();
                 break;
             case R.id.item_default:
                 // Записуємо дефолтні кольори до відповідних змінних
@@ -192,6 +177,26 @@ public class TaskSetting extends AppCompatActivity implements View.OnClickListen
         }
     }
 
+    //Передаємо дані зміни кольорів на головне актівіті
+    private void changeColor() {
+        if (mOldColorButtonTaskCreate == mColorButtonTaskCreate &&
+                mOldColorButtonTaskBegin == mColorButtonTaskBegin &&
+                mOldColorButtonTaskFinish == mColorButtonTaskFinish) {
+            finish();
+            // Анімація переходу між актівіті
+            overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_right_to_left);
+        } else {
+            Intent intent = new Intent(this, TaskActivity.class);
+            intent.putExtra(TaskActivity.COLOR_TASK_CREATE, mColorButtonTaskCreate);
+            intent.putExtra(TaskActivity.COLOR_TASK_BEGIN, mColorButtonTaskBegin);
+            intent.putExtra(TaskActivity.COLOR_TASK_FINISH, mColorButtonTaskFinish);
+            setResult(TaskActivity.RESULT_OK, intent);
+            finish();
+            // Анімація переходу між актівіті
+            overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_right_to_left);
+        }
+    }
+
     // Надаємо круглу форму для кнопки та записуємо вибраний користувачем колір
     private GradientDrawable createShape(int color) {
 
@@ -205,6 +210,12 @@ public class TaskSetting extends AppCompatActivity implements View.OnClickListen
     public void run() {
         TaskSaveLoad save = new TaskSaveLoad(this, TaskActivity.FILE_NAME);
         save.saveColor(mColorButtonTaskCreate, mColorButtonTaskBegin, mColorButtonTaskFinish);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        changeColor();
     }
 
     @Override

@@ -105,5 +105,12 @@ public class TaskAddActivity extends AppCompatActivity {
         outState.putString(NAME_TASK_KEY, getTextFromEditText(mEditTextTaskName));
         outState.putString(DESCRIPTION_TASK_KEY, getTextFromEditText(mEditTextDescription));
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.enter_left_to_right,R.anim.exit_left_to_right);
+    }
 }
 

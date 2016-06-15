@@ -50,8 +50,6 @@ public class TaskActivity extends AppCompatActivity implements Runnable {
     public final static String TASK_KEY = "Task";
     public final static String DESCRIPTION_KEY = "Description";
     public final static String ITEM_LIST_VIEW_POSITION_KEY = "Position";
-    public final static String ALL_OF_TASK_KEY = "ArrayList with Tasks";
-    public final static String ITEM_SELECTED_KEY = "Item selected";
     public final static String COLOR_TASK_CREATE = "Task create";
     public final static String COLOR_TASK_BEGIN = "Task begin";
     public final static String COLOR_TASK_FINISH = "Task finish";
@@ -275,10 +273,13 @@ public class TaskActivity extends AppCompatActivity implements Runnable {
         }
         // різниця часу закінчення і початку в мілісекундах
         long mDifferenceTime = mFinishTime - mStarTime;
+        Log.d("MLog","Start time = "+(mStarTime/1000)+"сек, FinishTime = "+(mFinishTime/1000)+"сек\nDifference = " +
+                (mDifferenceTime/1000));
         //Розбиваємо міліскунди на хвилини і години
+        long mDifHours = (mDifferenceTime/1000) / 3600;
         long mDifMinutes = ((mDifferenceTime / 1000) % 3600) / 60;
-        long mDifHours = mDifMinutes / 3600;
-        Log.d("MLog", "mDifMinutes " + mDifMinutes + ", mDifHours " + mDifHours + " mDifferenceTime " + mDifferenceTime);
+
+        Log.d("MLog", "DifHours = " + mDifHours + ", DifMinutes " + mDifMinutes);
         return String.format("%02d:%02d", mDifHours, mDifMinutes);
     }
 
@@ -287,6 +288,7 @@ public class TaskActivity extends AppCompatActivity implements Runnable {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem mItem;
+
         if (mItemSelectedId == -1) {
             return true;
         }
@@ -330,7 +332,6 @@ public class TaskActivity extends AppCompatActivity implements Runnable {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-
             case R.id.menuSortA_Z:
                 mItemSelectedId = id;
                 item.setChecked(true);
