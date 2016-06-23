@@ -1,10 +1,15 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="text_task">22sp</dimen>
-    <dimen name="text_description">16sp</dimen>
-    <dimen name="text_time">12sp</dimen>
+    <dimen name="activity_margin">7dp</dimen>
+    <dimen name="text_task">16sp</dimen>
+    <dimen name="text_description">12sp</dimen>
+    <dimen name="text_time">10sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="setting_margin_mainLayout">10dp</dimen>
+    <dimen name="text_button_size">10sp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="button_height">20dp</dimen>
+    <dimen name="button_width">40dp</dimen>
 </resources>

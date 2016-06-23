@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:swipe="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    swipe:leftEdgeSwipeOffset="0dp"
+    swipe:rightEdgeSwipeOffset="0dp">
+
+    <!--з права на ліво-->
+
+    <LinearLayout
+        android:id="@+id/bottom_wrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:elevation="8dp"
+        android:paddingTop="@dimen/activity_margin"
+        android:weightSum="2"
+        tools:targetApi="lollipop">
+
+        <ImageView
+            android:id="@+id/imageView_edit"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/textColorSwipeEdit"
+            android:gravity="center"
+            android:src="@drawable/ic_edit_row" />
+
+        <ImageView
+            android:id="@+id/imageView_delete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/textColorSwipeDelete"
+            android:gravity="center"
+            android:src="@drawable/ic_delete_row" />
+
+    </LinearLayout>
+
+
+    <!--з ліва на право -->
+
+    <LinearLayout
+        android:id="@+id/bottom_wrapper1"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:elevation="8dp"
+        android:paddingTop="@dimen/activity_margin"
+        android:weightSum="2"
+        tools:targetApi="lollipop">
+
+        <TextView
+            android:id="@+id/textView_resetTask"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/textColorSwipeEdit"
+            android:gravity="center"
+            android:text="@string/reset_task"
+            android:textColor="@color/textColorBlack" />
+
+        <TextView
+            android:id="@+id/textView_resetTaskEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/textColorSwipeDelete"
+            android:gravity="center"
+            android:text="@string/reset_task_end"
+            android:textColor="@color/textColorBlack" />
+    </LinearLayout>
+
+    <!--  itemView of RecyclerView -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/root_item_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_margin"
+        android:paddingRight="@dimen/activity_margin"
+        android:paddingTop="@dimen/activity_margin">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="3dp"
+            android:theme="@style/AppTheme"
+            tools:targetApi="lollipop">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/iclude_item_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/activity_margin">
+
+                <TextView
+                    android:id="@+id/textView_item_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/textColorBlack"
+                    android:textSize="@dimen/text_task"
+                    android:textStyle="bold"
+                    tools:text="Large Text" />
+
+                <TextView
+                    android:id="@+id/textView_item_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/textColorSecondary"
+                    android:textSize="@dimen/text_description"
+                    android:textStyle="italic"
+                    android:typeface="monospace"
+                    tools:text="Medium Text" />
+
+                <LinearLayout
+                    android:id="@+id/layout_dateTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView_dateTime_start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="@dimen/text_time"
+                        android:typeface="normal"
+                        tools:text="Small Text" />
+
+                    <TextView
+                        android:id="@+id/textView_dateTime_finish"
+                        android:layout_width="wrap_content"
+
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10sp"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="@dimen/text_time"
+                        android:typeface="normal"
+                        tools:text="Small Text" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_buttons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/button_start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/button_height"
+                        android:layout_gravity="left"
+                        android:background="@drawable/selector_button"
+                        android:elevation="2dp"
+                        android:minWidth="@dimen/button_width"
+                        android:text="@string/button_left"
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="@dimen/text_button_size" />
+
+                    <Button
+                        android:id="@+id/button_finish"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/button_height"
+                        android:layout_gravity="right"
+                        android:layout_marginLeft="60dp"
+                        android:background="@drawable/selector_button"
+                        android:elevation="2dp"
+                        android:minWidth="@dimen/button_width"
+                        android:text="@string/button_finish"
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="@dimen/text_button_size" />
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+</com.daimajia.swipe.SwipeLayout>

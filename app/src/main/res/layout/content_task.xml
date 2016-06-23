@@ -11,12 +11,9 @@
     tools:showIn="@layout/activity_task">
 
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/listView_task"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@drawable/list_view_separator"
-        android:dividerHeight="2sp" />
-
+        android:layout_height="match_parent" />
 
 </LinearLayout>

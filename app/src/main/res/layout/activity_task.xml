@@ -28,6 +28,7 @@
         android:src="@drawable/ic_add"
         fab:fab_colorNormal="@color/colorAccent"
         fab:fab_colorPressed="@color/colorIcons"
-        fab:fab_shadow="true" />
+        fab:fab_shadow="true"
+        app:elevation="6dp"/>
 
 </android.support.design.widget.CoordinatorLayout>

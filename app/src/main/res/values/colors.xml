@@ -14,4 +14,7 @@
     <color name="colorGreen">#a5f9a9</color>
     <color name="colorLGHTYellow">#e9d2ff7b</color>
     <color name="colorRed">#d4ff8583</color>
+
+    <color name="textColorSwipeEdit">#766a56</color>
+    <color name="textColorSwipeDelete">#764f57</color>
 </resources>

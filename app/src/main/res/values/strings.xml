@@ -40,4 +40,16 @@
     <string name="IB_task_begin_description">Color if than task begin</string>
     <string name="IB_task_finish_description">Color if task finish</string>
     <string name="item_default">Default</string>
+    <string name="button_finish">Finish</string>
+    <string name="button_left">Start</string>
+    <string name="loading">Loading</string>
+    <string name="task_manager_logo">Task Manager</string>
+    <string name="reset_task">Reset task</string>
+    <string name="reset_task_end">Reset task\nend</string>
+    <string name="textView_task_autoFinish">Task auto finish</string>
+    <string name="textView_description_task_autoFinish">Enter than your task\nautomatically finished</string>
+    <string name="hint_auto_finish">XX</string>
+
+    <string name="dialog_title_autoFinish">Task automatically finished</string>
+    <string name="dialog_positive_button_autoFinish">OK</string>
 </resources>

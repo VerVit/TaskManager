@@ -14,8 +14,5 @@
         <include layout="@layout/toolbar" />
 
     </android.support.design.widget.AppBarLayout>
-
     <include layout="@layout/content_task_add" />
-
-
 </android.support.design.widget.CoordinatorLayout>

@@ -6,58 +6,82 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import com.daimajia.swipe.util.Attributes;
 import com.example.vitaliy.taskmanager.R;
 import com.example.vitaliy.taskmanager.adapter.CustomAdapter;
 import com.example.vitaliy.taskmanager.task.Task;
 import com.example.vitaliy.taskmanager.utils.RandomString;
-import com.example.vitaliy.taskmanager.utils.TaskSaveLoad;
+import com.example.vitaliy.taskmanager.utils.Realm.RealmController;
+import com.example.vitaliy.taskmanager.utils.SharedPreference.TaskSaveLoad;
 import com.melnykov.fab.FloatingActionButton;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.Locale;
+import java.util.UUID;
+
+import io.realm.RealmResults;
 
 public class TaskActivity extends AppCompatActivity implements Runnable {
 
     private ArrayList<Task> mArrayListTasks;
     private CustomAdapter mAdapterTasks;
     private LinearLayout mLayoutMain;
-    private ListView mViewTaskList;
+    private RecyclerView mViewTaskList;
     private Snackbar mSnackBarExit;
-    private int mColorCreate;
-    private int mColorBegin;
-    private int mColorFinish;
+    private LinearLayoutManager mLayoutManager;
+    private static int mColorCreate;
+    private static int mColorBegin;
+    private static int mColorFinish;
+    private static int mAutoFinish;
 
-    private final int REQUEST_CODE_ADD_TASK = 123;
-    private final int REQUEST_CODE_SET_TASK = 456;
-    private final int REQUEST_CODE_COLOR_TASK = 789;
+    private final static int REQUEST_CODE_ADD_TASK = 123;
+    private final static int REQUEST_CODE_SET_TASK = 456;
+    private final static int REQUEST_CODE_COLOR_TASK = 789;
 
-    public final static String FILE_NAME = "Tasks date";
+    final static String FILE_NAME = "Tasks date";
     public final static String TASK_KEY = "Task";
     public final static String DESCRIPTION_KEY = "Description";
     public final static String ITEM_LIST_VIEW_POSITION_KEY = "Position";
-    public final static String COLOR_TASK_CREATE = "Task create";
-    public final static String COLOR_TASK_BEGIN = "Task begin";
-    public final static String COLOR_TASK_FINISH = "Task finish";
+    final static String COLOR_TASK_CREATE = "Task create";
+    final static String COLOR_TASK_BEGIN = "Task begin";
+    final static String COLOR_TASK_FINISH = "Task finish";
+    final static String TASK_AUTO_FINISH = "Task auto finish";
 
     private int mItemSelectedId = -1;
     private static boolean mShowDialog;
     private AlertDialog.Builder mDialog;
 
+
+    public static int getmAutoFinish() {
+        return mAutoFinish;
+    }
+
+    public static int getREQUEST_CODE_SET_TASK() {
+        return REQUEST_CODE_SET_TASK;
+    }
+
+    public static int getmColorCreate() {
+        return mColorCreate;
+    }
+
+    public static int getmColorBegin() {
+        return mColorBegin;
+    }
+
+    public static int getmColorFinish() {
+        return mColorFinish;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,92 +90,22 @@ public class TaskActivity extends AppCompatActivity implements Runnable {
         final Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
-        mViewTaskList = (ListView) findViewById(R.id.listView_task);
+        mViewTaskList = (RecyclerView) findViewById(R.id.listView_task);
         mLayoutMain = (LinearLayout) findViewById(R.id.layout_main_1activity);
-
-        //Встановлюємо стандартні кольори якщо вони не були попередньо змінені в налаштуваннях
-        setDefaultColor();
 
         //Відновлюємо втрачені дані після знищення актівіті(зміни орієнтації екрану)
         savedInstanceState();
-
         //Свторюємо FAB
         createFAB();
 
         //Ініціалізуємо AlertDialog
         if (mShowDialog) {
-            createDialog();
+            createDialogToDeleteTask();
             mDialog.show();
-        } else createDialog();
-
-        // Ставимо слухача при кліку на ListView
-        mViewTaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                //Знаходимо TextView в поточному item listView
-                final TextView mTVDateAndTimeStart = (TextView) view.findViewById(R.id.textView_dateTime_start);
-                final TextView mTVDateAndTimeFinish = (TextView) view.findViewById(R.id.textView_dateTime_finish);
-
-                //Виконується якщо завдання не активне
-                if (mTVDateAndTimeStart.getText().toString().equals("")) {
-                    beginTask(position);
-                    //Виконується коли завдання активне
-                } else if (!(mTVDateAndTimeStart.getText().toString().equals("")) &&
-                        mTVDateAndTimeFinish.getText().toString().equals("")) {
-                    finishTask(position);
-                    //Спрацьовує коли завдання виконано і ви хочете його знову розпочати
-                } else {
-                    runSnackBar(mLayoutMain, "Do you want restart this Task", Snackbar.LENGTH_INDEFINITE)
-                            .setAction("Yes", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    // Скидається час виконання завдання
-                                    String mTempTask = mArrayListTasks.get(position).getmTaskName();
-                                    String mTempDescription = mArrayListTasks.get(position).getmDescription();
-                                    mArrayListTasks.set(position, new Task(mTempTask,
-                                            mTempDescription, null, null, mColorCreate));
-                                    mAdapterTasks.notifyDataSetChanged();
-                                }
-                            }).show();
-                }
-                //Зберігаємо дані в новому потоці
-                new Thread(TaskActivity.this).start();
-            }
-        });
-        // Створюэмо слухача на LongClick
-        mViewTaskList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                String tempTaskName = mArrayListTasks.get(position).getmTaskName();
-                String tempDescription = mArrayListTasks.get(position).getmDescription();
-
-                Intent intent = new Intent(TaskActivity.this, TaskAddActivity.class);
-                intent.putExtra(TASK_KEY, tempTaskName);
-                intent.putExtra(DESCRIPTION_KEY, tempDescription);
-                intent.putExtra(ITEM_LIST_VIEW_POSITION_KEY, position);
-                startActivityForResult(intent, REQUEST_CODE_SET_TASK);
-                overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_right_to_left);
-                return true;
-            }
-        });
-
+        } else createDialogToDeleteTask();
     }
 
-    //перевіряємо в методі чи кольори не були змінені користувачем
-    private void setDefaultColor() {
-        if (mColorCreate == 0) {
-            mColorCreate = getColorFromID(R.color.colorGreen);
-        }
-        if (mColorBegin == 0) {
-            mColorBegin = getColorFromID(R.color.colorLGHTYellow);
-        }
-        if (mColorFinish == 0) {
-            mColorFinish = getColorFromID(R.color.colorRed);
-        }
-    }
-
-    private void createDialog() {
+    private void createDialogToDeleteTask() {
         mDialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.dialog_title)
                 .setCancelable(false)
@@ -178,7 +132,7 @@ public class TaskActivity extends AppCompatActivity implements Runnable {
     private void createFAB() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
-            fab.attachToListView(mViewTaskList);
+            fab.attachToRecyclerView(mViewTaskList);
             fab.show(true);
             fab.hide(true);
             fab.setOnClickListener(new View.OnClickListener() {
@@ -194,14 +148,47 @@ public class TaskActivity extends AppCompatActivity implements Runnable {
     private void savedInstanceState() {
         //Створюэмо ArrayList для завдань та заповнюємо даними загруженими із файла
         mArrayListTasks = new ArrayList<>();
-        mArrayListTasks.addAll(new TaskSaveLoad(this, FILE_NAME).loadTasks());
-        mItemSelectedId = new TaskSaveLoad(this, FILE_NAME).loadItemId();
-
+        /*Завантажуємо дані щодо автозавершення завдань та Id вибраного пункту сортування завдань
+        кольори тасків. Якщо завантажене значення null то записуємо дефолтне значення*/
+        TaskSaveLoad taskSaveLoad = new TaskSaveLoad(this, FILE_NAME);
+        if (taskSaveLoad.loadItem_Id() != 0) {
+            mItemSelectedId = taskSaveLoad.loadItem_Id();
+        }
+        if (taskSaveLoad.loadAutoTimeFinish() != 0) {
+            mAutoFinish = taskSaveLoad.loadAutoTimeFinish();
+        } else mAutoFinish = 10;
+        if (taskSaveLoad.loadColorBegin() != 0) {
+            mColorBegin = taskSaveLoad.loadColorBegin();
+        } else {
+            mColorBegin = getColorFromID(R.color.colorLGHTYellow);
+        }
+        if (taskSaveLoad.loadColorCreate() != 0) {
+            mColorCreate = taskSaveLoad.loadColorCreate();
+        } else {
+            mColorCreate = getColorFromID(R.color.colorGreen);
+        }
+        if (taskSaveLoad.loadColorFinish() != 0) {
+            mColorFinish = taskSaveLoad.loadColorFinish();
+        } else {
+            mColorFinish = getColorFromID(R.color.colorRed);
+        }
+        //Завантажуємо з Realm дані завдань та записуємо до ArrayList
+        RealmResults<Task> realmResults = RealmController.with(this).getTasks();
+        for (Task task : realmResults) {
+            if (task != null) {
+                mArrayListTasks.add(task);
+            }
+        }
         /*Створюємо адаптер для ListView та прикріплюємо його. Встановлюємо автоматичне оновлення
         ListView при добавленні нового об6єкта до адаптеру*/
-        mAdapterTasks = new CustomAdapter(this, mArrayListTasks, R.layout.layout_item);
+        mAdapterTasks = new CustomAdapter(this, mArrayListTasks);
+        mLayoutManager = new LinearLayoutManager(this);
+        mViewTaskList.setLayoutManager(mLayoutManager);
+
         mViewTaskList.setAdapter(mAdapterTasks);
-        mAdapterTasks.setNotifyOnChange(true);
+        // Може витягуватись декілька свайп меню
+        mAdapterTasks.setMode(Attributes.Mode.Multiple);
+        mAdapterTasks.notifyDataSetChanged();
 
     }
 
@@ -226,63 +213,10 @@ public class TaskActivity extends AppCompatActivity implements Runnable {
         return snackbar;
     }
 
-    //Обробляє час закінчення роботи завдання
-    private void finishTask(int position) {
-        Date mFinishDate = new Date();
-        long mFinishTime = mFinishDate.getTime();
-        //перезаписуємо об’єкт Task в mArrayListTasks додаючи часові дані та обновляємо адаптер
-        String tempTask = mArrayListTasks.get(position).getmTaskName();
-        String tempDescription = mArrayListTasks.get(position).getmDescription();
-        String tempTaskBegin = mArrayListTasks.get(position).getmTaskBegin();
-        String tempTaskFinish = "-   " + getDateAndTime(mFinishDate) + "  "
-                + getDifferenceTime(mFinishTime, mArrayListTasks.get(position).getmTaskBegin());
-
-        mArrayListTasks.set(position, new Task(tempTask, tempDescription, tempTaskBegin, tempTaskFinish,
-                mColorFinish));
-        mAdapterTasks.notifyDataSetChanged();
-    }
-
-    //Обробляє час початку роботи завдання
-    private void beginTask(int position) {
-        Date mStartDate = new Date();
-        //перезаписуємо об’єкт Task в mArrayListTasks додаючи часові дані та обновляємо адаптер
-        String tempTask = mArrayListTasks.get(position).getmTaskName();
-        String tempDescription = mArrayListTasks.get(position).getmDescription();
-        mArrayListTasks.set(position, new Task(tempTask, tempDescription
-                , getDateAndTime(mStartDate), null, mColorBegin));
-        mAdapterTasks.notifyDataSetChanged();
-    }
-
+    //Отримуємо колір з ресурсів
     private int getColorFromID(int colorId) {
         return getResources().getColor(colorId);
     }
-
-    //Повертає стрінг з датою та часом вказаною в аргументі
-    private String getDateAndTime(Date mCurrentDate) {
-        return new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault()).format(mCurrentDate);
-    }
-
-    //Повертає стрінг з часом різниць 2 аргументів
-    private String getDifferenceTime(long mFinishTime, String mTextStartTask) {
-        long mStarTime = 0;
-        // Отримуємо час в мілісекундах закінчення виконная завдання
-        try {
-            mStarTime = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault()).parse(mTextStartTask).getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        // різниця часу закінчення і початку в мілісекундах
-        long mDifferenceTime = mFinishTime - mStarTime;
-        Log.d("MLog","Start time = "+(mStarTime/1000)+"сек, FinishTime = "+(mFinishTime/1000)+"сек\nDifference = " +
-                (mDifferenceTime/1000));
-        //Розбиваємо міліскунди на хвилини і години
-        long mDifHours = (mDifferenceTime/1000) / 3600;
-        long mDifMinutes = ((mDifferenceTime / 1000) % 3600) / 60;
-
-        Log.d("MLog", "DifHours = " + mDifHours + ", DifMinutes " + mDifMinutes);
-        return String.format("%02d:%02d", mDifHours, mDifMinutes);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -321,7 +255,7 @@ public class TaskActivity extends AppCompatActivity implements Runnable {
         new Thread(this).start();
     }
 
-    //Запускаємо TaskSetting
+    //Запускаємо актівіті TaskSetting
     private void launchSettingActivity() {
         Intent intent = new Intent(this, TaskSetting.class);
         startActivityForResult(intent, REQUEST_CODE_COLOR_TASK);
@@ -332,6 +266,7 @@ public class TaskActivity extends AppCompatActivity implements Runnable {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+            //пункти меню сортування
             case R.id.menuSortA_Z:
                 mItemSelectedId = id;
                 item.setChecked(true);
@@ -368,6 +303,7 @@ public class TaskActivity extends AppCompatActivity implements Runnable {
             case R.id.item_clean_list:
                 mShowDialog = true;
                 mDialog.show();
+                RealmController.with(this).clearAll();
                 break;
             //виходить з додатку
             case R.id.item_exit:
@@ -380,17 +316,21 @@ public class TaskActivity extends AppCompatActivity implements Runnable {
 
     // Створює рандомні завдання
     private void setRandomTasks() {
+
         int count = 0;
         for (int index = 0; index <= count; index++) {
            /* додаємо перше завдання для визначення параметра висоти Item та ListView.
             Далі змінюємо count і створюмо решту завдань*/
-            mArrayListTasks.add(new Task(RandomString.getRandom(10),
-                    RandomString.getRandom(30), null, null, mColorCreate));
+            Task task = new Task(RandomString.getRandom(10),
+                    RandomString.getRandom(30), null, null, mColorCreate, UUID.randomUUID().toString());
+            mArrayListTasks.add(task);
             mAdapterTasks.notifyDataSetChanged();
+            //Зберігаємо дані до бази даних
+            RealmController.with(this).addTask(task);
             if (count > 0) continue;
             //обраховуємо необхідну кількість завдань (в 3 рази більшу ніж вміщаєтьсяна дисплею)
-            count = (mViewTaskList.getHeight() / calculateListViewHeight(mViewTaskList)) * 3;
-            Log.d("MLog", "довжина item " + calculateListViewHeight(mViewTaskList) +
+            count = (mViewTaskList.getHeight() / calculateListViewHeight()) * 3;
+            Log.d("MLog", "довжина item " + calculateListViewHeight() +
                     "\nдовжина listView " + mViewTaskList.getHeight()
                     + "\nРізниця " + count);
         }
@@ -398,17 +338,16 @@ public class TaskActivity extends AppCompatActivity implements Runnable {
     }
 
     //Обраховуємо довжину Item ListView
-    private int calculateListViewHeight(ListView list) {
+    private int calculateListViewHeight() {
         int height = 0;
         //Отримуємо item ListView та визначаємо висоту, що вміщається в видиму область дисплея
-        View childView = list.getAdapter().getView(0, null, list);
+
+        // View childView = mLayoutManager.findViewByPosition(0);
+        View childView = mViewTaskList.getChildAt(0);
+        Log.d("MLog", "childView = " + childView);
         childView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         height += childView.getMeasuredHeight();
-
-        //Висота розділювача
-        height += list.getDividerHeight();
-
         return height;
     }
 
@@ -422,14 +361,18 @@ public class TaskActivity extends AppCompatActivity implements Runnable {
             String taskDescription;
             String taskBegin;
             String taskFinish;
+            String id;
             int color;
             //Виконується після додавання нового завдання
             switch (requestCode) {
                 case REQUEST_CODE_ADD_TASK:
                     taskName = data.getStringExtra(TASK_KEY);
                     taskDescription = data.getStringExtra(DESCRIPTION_KEY);
-                    mArrayListTasks.add(new Task(taskName, taskDescription, null, null, mColorCreate));
+                    Task tempTask = new Task(taskName, taskDescription, null, null, mColorCreate,UUID.randomUUID().toString());
+                    mArrayListTasks.add(tempTask);
                     mAdapterTasks.notifyDataSetChanged();
+                    //Зберігаємо дані до бази даних
+                    RealmController.with(this).addTask(tempTask);
                     break;
                 //Виконується після коригування завдання
                 case REQUEST_CODE_SET_TASK:
@@ -439,9 +382,12 @@ public class TaskActivity extends AppCompatActivity implements Runnable {
                     taskBegin = mArrayListTasks.get(mPosition).getmTaskBegin();
                     taskFinish = mArrayListTasks.get(mPosition).getmTaskFinish();
                     color = mArrayListTasks.get(mPosition).getmTaskColor();
-                    mArrayListTasks.set(mPosition, new Task(taskName, taskDescription, taskBegin,
-                            taskFinish, color));
-                    mAdapterTasks.notifyDataSetChanged();
+                    id = mArrayListTasks.get(mPosition).getId();
+                    Task tempTask2 = new Task(taskName, taskDescription, taskBegin, taskFinish, color,id);
+                    mArrayListTasks.set(mPosition, tempTask2);
+                    mAdapterTasks.notifyItemChanged(mPosition);
+                    //Зберігаємо дані до бази даних
+                    RealmController.with(this).updateTask(tempTask2);
                     break;
                 //Виконується при зміні кольору в налаштуваннях
                 case REQUEST_CODE_COLOR_TASK:
@@ -449,19 +395,20 @@ public class TaskActivity extends AppCompatActivity implements Runnable {
                     mColorCreate = data.getIntExtra(COLOR_TASK_CREATE, 0);
                     mColorBegin = data.getIntExtra(COLOR_TASK_BEGIN, 0);
                     mColorFinish = data.getIntExtra(COLOR_TASK_FINISH, 0);
+                    mAutoFinish = data.getIntExtra(TASK_AUTO_FINISH, 0);
 
                     for (int index = 0; index < mArrayListTasks.size(); index++) {
                         taskName = mArrayListTasks.get(index).getmTaskName();
                         taskDescription = mArrayListTasks.get(index).getmDescription();
                         taskBegin = mArrayListTasks.get(index).getmTaskBegin();
                         taskFinish = mArrayListTasks.get(index).getmTaskFinish();
-
+                        id=mArrayListTasks.get(index).getId();
                         if (taskBegin == null) {
-                            mArrayListTasks.set(index, new Task(taskName, taskDescription, null, null, mColorCreate));
+                            mArrayListTasks.set(index, new Task(taskName, taskDescription, null, null, mColorCreate,id));
                         } else if (taskFinish == null) {
-                            mArrayListTasks.set(index, new Task(taskName, taskDescription, taskBegin, null, mColorBegin));
+                            mArrayListTasks.set(index, new Task(taskName, taskDescription, taskBegin, null, mColorBegin,id));
                         } else {
-                            mArrayListTasks.set(index, new Task(taskName, taskDescription, taskBegin, taskFinish, mColorFinish));
+                            mArrayListTasks.set(index, new Task(taskName, taskDescription, taskBegin, taskFinish, mColorFinish,id));
                         }
                     }
                     mAdapterTasks.notifyDataSetChanged();
@@ -483,10 +430,10 @@ public class TaskActivity extends AppCompatActivity implements Runnable {
 
     @Override
     public void run() {
-        //Зберігаємо дані
+        //Зберігаємо в Shared Preference Id меню сортування завдань та кольори
         TaskSaveLoad taskSaveLoad = new TaskSaveLoad(this, FILE_NAME);
-        taskSaveLoad.saveTasks(mArrayListTasks);
         taskSaveLoad.saveItemId(mItemSelectedId);
+        taskSaveLoad.saveColor(mColorCreate, mColorBegin, mColorFinish);
     }
 
     @Override

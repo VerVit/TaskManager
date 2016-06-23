@@ -2,26 +2,62 @@ package com.example.vitaliy.taskmanager.task;
 
 import java.util.Comparator;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
+
 /**
  * Created by Vitaliy on 27.05.2016.
  */
-public class Task {
-
+public class Task extends RealmObject {
+    @PrimaryKey
+    private String mId;
+    @Required
     private String mTaskName;
+    @Required
     private String mDescription;
     private String mTaskBegin;
     private String mTaskFinish;
     private int mTaskColor;
 
-    public Task(String mTaskName, String mDescription, String mTaskBegin, String mTaskFinish, int mTaskColor) {
+    public Task(String mTaskName, String mDescription, String mTaskBegin, String mTaskFinish, int mTaskColor, String mId) {
         this.mTaskName = mTaskName;
         this.mDescription = mDescription;
         this.mTaskBegin = mTaskBegin;
         this.mTaskFinish = mTaskFinish;
         this.mTaskColor = mTaskColor;
+        this.mId = mId;
     }
 
     public Task() {
+    }
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        this.mId = id;
+    }
+
+    public void setmTaskName(String mTaskName) {
+        this.mTaskName = mTaskName;
+    }
+
+    public void setmDescription(String mDescription) {
+        this.mDescription = mDescription;
+    }
+
+    public void setmTaskBegin(String mTaskBegin) {
+        this.mTaskBegin = mTaskBegin;
+    }
+
+    public void setmTaskFinish(String mTaskFinish) {
+        this.mTaskFinish = mTaskFinish;
+    }
+
+    public void setmTaskColor(int mTaskColor) {
+        this.mTaskColor = mTaskColor;
     }
 
     public String getmDescription() {

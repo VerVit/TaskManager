@@ -20,7 +20,9 @@
             app:logo="@drawable/ic_launcher"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:title="@string/title_activity_task_setting"
-            app:titleTextColor="@color/colorAccent" />
+            app:titleTextColor="@color/colorAccent"
+            android:elevation="4dp"
+            tools:targetApi="lollipop" />
 
     </android.support.design.widget.AppBarLayout>
 

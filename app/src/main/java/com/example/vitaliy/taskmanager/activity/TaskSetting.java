@@ -9,11 +9,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.azeesoft.lib.colorpicker.ColorPickerDialog;
 import com.example.vitaliy.taskmanager.R;
-import com.example.vitaliy.taskmanager.utils.TaskSaveLoad;
+import com.example.vitaliy.taskmanager.utils.SharedPreference.TaskSaveLoad;
 
 public class TaskSetting extends AppCompatActivity implements View.OnClickListener, Runnable {
 
@@ -27,6 +28,7 @@ public class TaskSetting extends AppCompatActivity implements View.OnClickListen
     private ImageButton mIButtonTaskCreate;
     private ImageButton mIButtonTaskBegin;
     private ImageButton mIButtonTaskFinish;
+    private EditText mAutoFinish;
     private static int mButtonId;
     private static boolean mColorPicker;
 
@@ -43,6 +45,7 @@ public class TaskSetting extends AppCompatActivity implements View.OnClickListen
         mIButtonTaskCreate = (ImageButton) findViewById(R.id.imageButton_taskCreate);
         mIButtonTaskBegin = (ImageButton) findViewById(R.id.imageButton_taskBegin);
         mIButtonTaskFinish = (ImageButton) findViewById(R.id.imageButton_taskFinish);
+        mAutoFinish = (EditText) findViewById(R.id.editText_autoFinish);
 
         mIButtonTaskCreate.setOnClickListener(this);
         mIButtonTaskBegin.setOnClickListener(this);
@@ -50,13 +53,13 @@ public class TaskSetting extends AppCompatActivity implements View.OnClickListen
 
 
         //Відновлюємо втрачені дані після повороту екрану телефона
-        savedInstanceState(savedInstanceState);
+        savedInstanceState();
 
         //Ініціалізуємо колор пікет
         createColorPicker();
     }
 
-    private void savedInstanceState(Bundle savedInstanceState) {
+    private void savedInstanceState() {
 
         //завантажуємо кольори вибрані останній раз
         TaskSaveLoad load = new TaskSaveLoad(this, TaskActivity.FILE_NAME);
@@ -116,7 +119,15 @@ public class TaskSetting extends AppCompatActivity implements View.OnClickListen
             mColorPickerDialog.show();
         }
     }
-
+    // отримуємо int змінну з EditText, по дефолту 10
+    private int getIntFromET(EditText editText) {
+        int autoFinish;
+        if (editText.getText().length() != 0) {
+            autoFinish = Integer.parseInt(editText.getText().toString());
+        } else return 10;
+        return autoFinish;
+    }
+    //Робимо видимою HomeButton
     private void enabledHomeButton() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -138,7 +149,7 @@ public class TaskSetting extends AppCompatActivity implements View.OnClickListen
 
             // Призначаємо слухача на кнопку "назад"
             case android.R.id.home:
-                changeColor();
+                startIntent();
                 break;
             case R.id.item_default:
                 // Записуємо дефолтні кольори до відповідних змінних
@@ -149,9 +160,9 @@ public class TaskSetting extends AppCompatActivity implements View.OnClickListen
                 mIButtonTaskCreate.setImageDrawable(createShape(mColorButtonTaskCreate));
                 mIButtonTaskBegin.setImageDrawable(createShape(mColorButtonTaskBegin));
                 mIButtonTaskFinish.setImageDrawable(createShape(mColorButtonTaskFinish));
+                mAutoFinish.setText("10");
                 break;
         }
-
         return true;
     }
 
@@ -178,7 +189,7 @@ public class TaskSetting extends AppCompatActivity implements View.OnClickListen
     }
 
     //Передаємо дані зміни кольорів на головне актівіті
-    private void changeColor() {
+    private void startIntent() {
         if (mOldColorButtonTaskCreate == mColorButtonTaskCreate &&
                 mOldColorButtonTaskBegin == mColorButtonTaskBegin &&
                 mOldColorButtonTaskFinish == mColorButtonTaskFinish) {
@@ -190,7 +201,8 @@ public class TaskSetting extends AppCompatActivity implements View.OnClickListen
             intent.putExtra(TaskActivity.COLOR_TASK_CREATE, mColorButtonTaskCreate);
             intent.putExtra(TaskActivity.COLOR_TASK_BEGIN, mColorButtonTaskBegin);
             intent.putExtra(TaskActivity.COLOR_TASK_FINISH, mColorButtonTaskFinish);
-            setResult(TaskActivity.RESULT_OK, intent);
+            intent.putExtra(TaskActivity.TASK_AUTO_FINISH, getIntFromET(mAutoFinish));
+            setResult(RESULT_OK,intent);
             finish();
             // Анімація переходу між актівіті
             overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_right_to_left);
@@ -210,12 +222,12 @@ public class TaskSetting extends AppCompatActivity implements View.OnClickListen
     public void run() {
         TaskSaveLoad save = new TaskSaveLoad(this, TaskActivity.FILE_NAME);
         save.saveColor(mColorButtonTaskCreate, mColorButtonTaskBegin, mColorButtonTaskFinish);
+        save.saveAutoTimeFinish(getIntFromET(mAutoFinish));
     }
 
     @Override
     public void onBackPressed() {
-
-        changeColor();
+        startIntent();
     }
 
     @Override

@@ -5,11 +5,8 @@
     android:id="@+id/setting_layout_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginEnd="@dimen/setting_margin_mainLayout"
-    android:layout_marginLeft="@dimen/setting_margin_mainLayout"
-    android:layout_marginRight="@dimen/setting_margin_mainLayout"
-    android:layout_marginStart="@dimen/setting_margin_mainLayout"
     android:orientation="vertical"
+    android:padding="@dimen/activity_horizontal_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.vitaliy.taskmanager.activity.TaskSetting">
 
@@ -41,7 +38,9 @@
             style="@style/imageButton_setting"
             android:layout_alignTop="@+id/textView_taskCreate"
             android:background="@drawable/task_create_color"
-            android:contentDescription="@string/IB_task_create_description" />
+            android:contentDescription="@string/IB_task_create_description"
+            android:elevation="2dp"
+            tools:targetApi="lollipop" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -71,7 +70,9 @@
             style="@style/imageButton_setting"
             android:layout_alignTop="@+id/textView_taskBegin"
             android:background="@drawable/task_begin_color"
-            android:contentDescription="@string/IB_task_begin_description" />
+            android:contentDescription="@string/IB_task_begin_description"
+            android:elevation="2dp"
+            tools:targetApi="lollipop" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -101,7 +102,45 @@
             style="@style/imageButton_setting"
             android:layout_alignTop="@+id/textView_taskFinish"
             android:background="@drawable/task_finish_color"
-            android:contentDescription="@string/IB_task_finish_description" />
+            android:contentDescription="@string/IB_task_finish_description"
+            android:elevation="2dp"
+            tools:targetApi="lollipop" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/textView_task_autoFinish"
+            style="@style/textViewLarge_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/textView_task_autoFinish"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/textView_description_task_autoFinish"
+            style="@style/textViewMedium_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView_task_autoFinish"
+            android:text="@string/textView_description_task_autoFinish"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/editText_autoFinish"
+            style="@style/textViewLarge_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:hint="@string/hint_auto_finish"
+            android:inputType="numberDecimal"
+            android:maxEms="4"
+            android:maxWidth="40dp" />
     </RelativeLayout>
 
     <RelativeLayout

@@ -3,23 +3,23 @@
     package="com.example.vitaliy.taskmanager">
 
     <application
+        android:name=".app.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".activity.TaskActivity"
             android:label="@string/app_name"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.TaskActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.TaskAddActivity"
             android:label="@string/toolbar_title_add_task"
@@ -29,8 +29,16 @@
             android:label="@string/title_activity_task_setting"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.example.vitaliy.taskmanager.activity.TaskActivity" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.vitaliy.taskmanager.activity.TaskActivity" />
+        </activity>
+        <activity android:name=".activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
         </activity>
     </application>
+
 </manifest>
